@@ -1,11 +1,11 @@
-import { Context, Line, Circle, Semicircle, Rectangle } from './partials/index.js';
+import { Context, Dot, Line, Circle, Semicircle, Rectangle } from './partials/index.js';
 
 // Canvas Setup
 const canvas = document.getElementById('cad');
 const context = new Context(canvas);
 
 // Figure Select
-let selectedValue = 'line';
+let selectedValue = 'dot';
 const gridBtn = document.getElementById('grid');
 const clearBtn = document.getElementById('clear');
 const exportBtn = document.getElementById('export');
@@ -19,6 +19,10 @@ figureSelect.addEventListener('input', (e) => (selectedValue = e.target.value));
 const points = [];
 const componentsHistory = [];
 const componentsMap = {
+	dot: {
+		class: Dot,
+		points: 1,
+	},
 	line: {
 		class: Line,
 		points: 2,
@@ -44,7 +48,9 @@ canvas.addEventListener('mousedown', (e) => {
 });
 
 canvas.addEventListener('mousemove', (e) => {
-	if (points.length) {
+	const selected = componentsMap[selectedValue];
+
+	if (points.length || selected.points === 1) {
 		const tempPoints = [...points, { x: e.offsetX, y: e.offsetY }];
 
 		previewElement(selectedValue, tempPoints);
