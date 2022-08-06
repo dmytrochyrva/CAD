@@ -20,14 +20,17 @@
 				height: 100vh;
 				background: radial-gradient(#01195b, #000c30);
 			}
+			nav {
+				box-shadow: 0 4px 10px 0 #00071b;
+			}
 		</style>
 	</head>
 	<body>
-		<div class="h-100 d-flex flex-column">
-			<nav class="d-flex align-items-center gap-2 p-3 border-bottom">
+		<div class="h-100 d-flex flex-column gap-1">
+			<nav class="d-flex align-items-center gap-2 p-3">
 				<select name="figure" id="figure" class="btn btn-primary">
 					<option value="line">Line</option>
-					<option value="curve">Curve</option>
+					<option value="circle">Circle</option>
 				</select>
 
 				<button id="clear" class="btn btn-danger">Clear</button>

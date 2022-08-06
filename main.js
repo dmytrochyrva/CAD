@@ -1,4 +1,4 @@
-import { Context, Line } from './partials/index.js';
+import { Context, Line, Circle } from './partials/index.js';
 
 // Canvas Setup
 const canvas = document.getElementById('cad');
@@ -44,9 +44,14 @@ function createElement(element) {
 		case 'line':
 			const line = new Line(context.ctx, startX, startY, endX, endY);
 			context.elements.push(line);
-			context.updateCanvas();
+			break;
+		case 'circle':
+			const circle = new Circle(context.ctx, startX, startY, endX, endY);
+			context.elements.push(circle);
 			break;
 	}
+
+	context.updateCanvas();
 }
 
 function previewElement(element, xEnd, yEnd) {
@@ -55,6 +60,9 @@ function previewElement(element, xEnd, yEnd) {
 	switch (element) {
 		case 'line':
 			Line.preview(context.ctx, startX, startY, xEnd, yEnd);
+			break;
+		case 'circle':
+			Circle.preview(context.ctx, startX, startY, xEnd, yEnd);
 			break;
 	}
 }
