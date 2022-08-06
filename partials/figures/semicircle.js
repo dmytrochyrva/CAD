@@ -13,14 +13,27 @@ export class Semicircle {
 	draw() {
 		const dX = this.xEnd - this.xStart;
 		const dY = this.yEnd - this.yStart;
+		const hyp = Math.sqrt(dX ** 2 + dY ** 2);
 		const radius = Math.sqrt(dX ** 2 + dY ** 2);
 
-		let angle = Math.PI * 2;
+		let eAngle = Math.PI * 2;
+		let sAngle =
+			this.xEnd > this.xStart
+				? Math.asin(dY / hyp)
+				: this.yEnd > this.yStart
+				? Math.acos(dX / hyp)
+				: -Math.acos(dX / hyp);
+
 		if (this.xLength && this.yLength) {
 			const dX = this.xLength - this.xStart;
 			const dY = this.yLength - this.yStart;
 			const hyp = Math.floor(Math.sqrt(dX ** 2 + dY ** 2));
-			angle = Math.asin(dY / hyp) * Math.PI;
+			eAngle =
+				this.xLength > this.xStart
+					? Math.asin(dY / hyp)
+					: this.yLength > this.yStart
+					? Math.acos(dX / hyp)
+					: -Math.acos(dX / hyp);
 		}
 
 		this.ctx.save();
@@ -28,7 +41,7 @@ export class Semicircle {
 		this.ctx.lineWidth = 2;
 		this.ctx.moveTo(this.xStart, this.yStart);
 		this.ctx.beginPath();
-		this.ctx.arc(this.xStart, this.yStart, radius, 0, angle);
+		this.ctx.arc(this.xStart, this.yStart, radius, sAngle, eAngle);
 		this.ctx.stroke();
 		this.ctx.restore();
 	}
@@ -40,16 +53,27 @@ export class Semicircle {
 		const dY = end.y - start.y;
 		const textX = start.x + dX / 2 - 6;
 		const textY = start.y + dY / 2 - 10;
+		const hyp = Math.sqrt(dX ** 2 + dY ** 2);
 		const radius = Math.floor(Math.sqrt(dX ** 2 + dY ** 2));
 
-		let eAngle = end.x > start.x ? Math.PI * 2 : Math.PI * 4;
-		let sAngle = end.x > start.x ? 0 : Math.PI;
+		let eAngle = Math.PI * 6;
+		let sAngle =
+			end.x > start.x
+				? Math.asin(dY / hyp)
+				: end.y > start.y
+				? Math.acos(dX / hyp)
+				: -Math.acos(dX / hyp);
 
 		if (length) {
 			const dX = length.x - start.x;
 			const dY = length.y - start.y;
-			const hyp = Math.floor(Math.sqrt(dX ** 2 + dY ** 2));
-			eAngle = Math.asin(dY / hyp) * Math.PI;
+			const hyp = Math.sqrt(dX ** 2 + dY ** 2);
+			eAngle =
+				length.x > start.x
+					? Math.asin(dY / hyp)
+					: length.y > start.y
+					? Math.acos(dX / hyp)
+					: -Math.acos(dX / hyp);
 		}
 
 		ctx.save();
@@ -62,11 +86,6 @@ export class Semicircle {
 		ctx.arc(start.x, start.y, radius, sAngle, eAngle);
 		ctx.moveTo(start.x, start.y);
 		ctx.lineTo(end.x, end.y);
-
-		if (length) {
-			ctx.moveTo(start.x, start.y);
-			ctx.lineTo(length.x, length.y);
-		}
 
 		ctx.stroke();
 		ctx.fillText(`${radius}px`, textX, textY);
