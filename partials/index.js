@@ -1,2 +1,2 @@
-export * from './canvas.js';
+export * from './context.js';
 export * from './figures/index.js';

@@ -13,6 +13,7 @@ clearBtn.addEventListener('click', () => context.clearCanvas());
 figureSelect.addEventListener('input', (e) => (selectedValue = e.target.value));
 
 const points = [];
+const componentsHistory = [];
 const componentsMap = {
 	line: {
 		class: Line,
@@ -49,6 +50,7 @@ function createElement(figure, _points) {
 		const element = new selected.class(context.ctx, _points);
 		context.elements.push(element);
 		points.length = 0;
+		componentsHistory.length = 0;
 		context.updateCanvas();
 	}
 }
@@ -58,3 +60,29 @@ function previewElement(figure, _points) {
 
 	componentsMap[figure].class.preview(context.ctx, _points);
 }
+
+function initKeyMap() {
+	window.addEventListener('keydown', (e) => {
+		if (e.key.toLowerCase() === 'z' && e.ctrlKey && e.shiftKey) {
+			const undoneComponent = componentsHistory.pop();
+
+			if (undoneComponent) {
+				context.elements.push(undoneComponent);
+				context.updateCanvas();
+			}
+			return;
+		}
+		if (e.key.toLowerCase() === 'z' && e.ctrlKey) {
+			componentsHistory.push(context.elements.pop());
+			context.updateCanvas();
+			return;
+		}
+		if (e.key === 'Escape') {
+			points.length = 0;
+			context.updateCanvas();
+			return;
+		}
+	});
+}
+
+initKeyMap();
