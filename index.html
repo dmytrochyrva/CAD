@@ -11,6 +11,7 @@
 			integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
 			crossorigin="anonymous"
 		/>
+		<link href="https://viglino.github.io/font-gis/css/font-gis.css" rel="stylesheet" />
 		<style>
 			* {
 				margin: 0;
@@ -23,21 +24,31 @@
 			nav {
 				box-shadow: 0 4px 10px 0 #00071b;
 			}
+			.left-panel {
+				box-shadow: 4px 0 10px 0 #00071b;
+			}
 		</style>
 	</head>
-	<body>
+	<body class="text-light">
 		<div class="h-100 d-flex flex-column gap-1">
 			<nav class="d-flex align-items-center gap-2 p-3">
-				<select name="figure" id="figure" class="btn btn-primary">
+				<select name="figure" id="figure" class="btn btn-sm btn-primary">
 					<option value="line">Line</option>
 					<option value="circle">Circle</option>
 				</select>
 
-				<button id="clear" class="btn btn-danger">Clear</button>
+				<button id="clear" class="btn btn-sm btn-danger">Clear</button>
 			</nav>
 
-			<main class="flex-grow-1">
-				<canvas id="cad" class="d-block"></canvas>
+			<main class="flex-grow-1 d-flex">
+				<aside class="left-panel">
+					<div class="p-4 d-flex flex-column"></div>
+				</aside>
+				<aside class="flex-grow-1 ps-1 pt-1">
+					<div class="h-100">
+						<canvas id="cad" class="d-block"></canvas>
+					</div>
+				</aside>
 			</main>
 		</div>
 		<script src="main.js" type="module"></script>
