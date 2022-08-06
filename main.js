@@ -7,9 +7,11 @@ const context = new Context(canvas);
 // Figure Select
 let selectedValue = 'line';
 const clearBtn = document.getElementById('clear');
+const exportBtn = document.getElementById('export');
 const figureSelect = document.getElementById('figure');
 
 clearBtn.addEventListener('click', () => context.clearCanvas());
+exportBtn.addEventListener('click', () => context.exportImage());
 figureSelect.addEventListener('input', (e) => (selectedValue = e.target.value));
 
 const points = [];

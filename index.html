@@ -31,14 +31,17 @@
 	</head>
 	<body class="text-light">
 		<div class="h-100 d-flex flex-column gap-1">
-			<nav class="d-flex align-items-center gap-2 p-3">
+			<nav class="d-flex align-items-center justify-content-between p-3">
 				<select name="figure" id="figure" class="btn btn-sm btn-primary">
 					<option value="line">Line</option>
 					<option value="circle">Circle</option>
 					<option value="semicircle">Semicircle</option>
 				</select>
 
-				<button id="clear" class="btn btn-sm btn-danger">Clear</button>
+				<div class="d-flex gap-2">
+					<button id="clear" class="btn btn-sm btn-danger">Clear</button>
+					<button id="export" class="btn btn-sm btn-secondary">Export</button>
+				</div>
 			</nav>
 
 			<main class="flex-grow-1 d-flex">
