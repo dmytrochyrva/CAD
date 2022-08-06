@@ -12,57 +12,45 @@ const figureSelect = document.getElementById('figure');
 clearBtn.addEventListener('click', () => context.clearCanvas());
 figureSelect.addEventListener('input', (e) => (selectedValue = e.target.value));
 
-let firstClick = true;
-let startX;
-let startY;
-let endX;
-let endY;
+const points = [];
+const componentsMap = {
+	line: {
+		class: Line,
+		points: 2,
+	},
+	circle: {
+		class: Circle,
+		points: 2,
+	},
+};
 
 canvas.addEventListener('mousedown', (e) => {
-	if (firstClick) {
-		startX = e.offsetX;
-		startY = e.offsetY;
-		firstClick = false;
-		return;
-	}
+	points.push({ x: e.offsetX, y: e.offsetY });
 
-	endX = e.offsetX;
-	endY = e.offsetY;
-	firstClick = true;
-
-	createElement(selectedValue);
+	createElement(selectedValue, points);
 });
 
 canvas.addEventListener('mousemove', (e) => {
-	if (!firstClick) {
-		previewElement(selectedValue, e.offsetX, e.offsetY);
+	if (points.length) {
+		const tempPoints = [...points, { x: e.offsetX, y: e.offsetY }];
+
+		previewElement(selectedValue, tempPoints);
 	}
 });
 
-function createElement(element) {
-	switch (element) {
-		case 'line':
-			const line = new Line(context.ctx, startX, startY, endX, endY);
-			context.elements.push(line);
-			break;
-		case 'circle':
-			const circle = new Circle(context.ctx, startX, startY, endX, endY);
-			context.elements.push(circle);
-			break;
-	}
+function createElement(figure, _points) {
+	const selected = componentsMap[figure];
 
-	context.updateCanvas();
+	if (selected.points === _points.length) {
+		const element = new selected.class(context.ctx, _points);
+		context.elements.push(element);
+		points.length = 0;
+		context.updateCanvas();
+	}
 }
 
-function previewElement(element, xEnd, yEnd) {
+function previewElement(figure, _points) {
 	context.updateCanvas();
 
-	switch (element) {
-		case 'line':
-			Line.preview(context.ctx, startX, startY, xEnd, yEnd);
-			break;
-		case 'circle':
-			Circle.preview(context.ctx, startX, startY, xEnd, yEnd);
-			break;
-	}
+	componentsMap[figure].class.preview(context.ctx, _points);
 }

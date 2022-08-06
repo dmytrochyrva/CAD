@@ -1,10 +1,10 @@
 export class Circle {
-	constructor(ctx, xStart, yStart, xEnd, yEnd, strokeColor = 'white') {
+	constructor(ctx, points, strokeColor = 'white') {
 		this.ctx = ctx;
-		this.xStart = xStart;
-		this.yStart = yStart;
-		this.xEnd = xEnd;
-		this.yEnd = yEnd;
+		this.xStart = points[0].x;
+		this.yStart = points[0].y;
+		this.xEnd = points[1].x;
+		this.yEnd = points[1].y;
 		this.strokeColor = strokeColor;
 	}
 
@@ -23,11 +23,13 @@ export class Circle {
 		this.ctx.restore();
 	}
 
-	static preview(ctx, xStart, yStart, xEnd, yEnd) {
-		const dX = xEnd - xStart;
-		const dY = yEnd - yStart;
-		const textX = xStart + dX / 2 - 6;
-		const textY = yStart + dY / 2 - 10;
+	static preview(ctx, points) {
+		const [start, end] = points;
+
+		const dX = end.x - start.x;
+		const dY = end.y - start.y;
+		const textX = start.x + dX / 2 - 6;
+		const textY = start.y + dY / 2 - 10;
 		const radius = Math.floor(Math.sqrt(dX ** 2 + dY ** 2));
 
 		ctx.save();
@@ -36,9 +38,9 @@ export class Circle {
 		ctx.lineWidth = 1;
 		ctx.setLineDash([5, 5]);
 		ctx.beginPath();
-		ctx.moveTo(xStart, yStart);
-		ctx.lineTo(xEnd, yEnd);
-		ctx.arc(xStart, yStart, radius, 0, Math.PI * 2);
+		ctx.moveTo(start.x, start.y);
+		ctx.lineTo(end.x, end.y);
+		ctx.arc(start.x, start.y, radius, 0, Math.PI * 2);
 		ctx.stroke();
 		ctx.fillText(`${radius}px`, textX, textY);
 		ctx.restore();
