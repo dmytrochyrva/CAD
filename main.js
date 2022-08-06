@@ -1,4 +1,4 @@
-import { Context, Line, Circle } from './partials/index.js';
+import { Context, Line, Circle, Semicircle } from './partials/index.js';
 
 // Canvas Setup
 const canvas = document.getElementById('cad');
@@ -21,6 +21,10 @@ const componentsMap = {
 	circle: {
 		class: Circle,
 		points: 2,
+	},
+	semicircle: {
+		class: Semicircle,
+		points: 3,
 	},
 };
 
