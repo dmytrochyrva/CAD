@@ -1,15 +1,16 @@
 import { Context, Line } from './partials/index.js';
 
-// Figure Select
-let selectedValue = '';
-const figureSelect = document.getElementById('figure');
-figureSelect.addEventListener('input', (e) => (selectedValue = e.target.value));
-const clearBtn = document.getElementById('clear');
-clearBtn.addEventListener('click', () => context.clearCanvas());
-
 // Canvas Setup
 const canvas = document.getElementById('cad');
 const context = new Context(canvas);
+
+// Figure Select
+let selectedValue = 'line';
+const clearBtn = document.getElementById('clear');
+const figureSelect = document.getElementById('figure');
+
+clearBtn.addEventListener('click', () => context.clearCanvas());
+figureSelect.addEventListener('input', (e) => (selectedValue = e.target.value));
 
 let firstClick = true;
 let startX;
@@ -29,14 +30,31 @@ canvas.addEventListener('mousedown', (e) => {
 	endY = e.offsetY;
 	firstClick = true;
 
-	const line = new Line(context.ctx, startX, startY, endX, endY);
-	context.elements.push(line);
-	context.updateCanvas();
+	createElement(selectedValue);
 });
 
 canvas.addEventListener('mousemove', (e) => {
 	if (!firstClick) {
-		context.updateCanvas();
-		Line.preview(context.ctx, startX, startY, e.offsetX, e.offsetY);
+		previewElement(selectedValue, e.offsetX, e.offsetY);
 	}
 });
+
+function createElement(element) {
+	switch (element) {
+		case 'line':
+			const line = new Line(context.ctx, startX, startY, endX, endY);
+			context.elements.push(line);
+			context.updateCanvas();
+			break;
+	}
+}
+
+function previewElement(element, xEnd, yEnd) {
+	context.updateCanvas();
+
+	switch (element) {
+		case 'line':
+			Line.preview(context.ctx, startX, startY, xEnd, yEnd);
+			break;
+	}
+}
