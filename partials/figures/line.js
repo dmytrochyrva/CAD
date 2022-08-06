@@ -18,11 +18,22 @@ export class Line {
 	}
 
 	static preview(ctx, xStart, yStart, xEnd, yEnd) {
+		const dX = xEnd - xStart;
+		const dY = yEnd - yStart;
+		const textX = xStart + dX / 2 - 6;
+		const textY = yStart + dY / 2 - 10;
+		const lineLength = Math.floor(Math.sqrt(dX ** 2 + dY ** 2));
+
+		ctx.save();
+		ctx.fillStyle = 'gray';
 		ctx.strokeStyle = 'gray';
 		ctx.lineWidth = 1;
 		ctx.beginPath();
+		ctx.setLineDash([5, 5]);
 		ctx.moveTo(xStart, yStart);
 		ctx.lineTo(xEnd, yEnd);
 		ctx.stroke();
+		ctx.fillText(`${lineLength}px`, textX, textY);
+		ctx.restore();
 	}
 }
