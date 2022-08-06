@@ -6,10 +6,12 @@ const context = new Context(canvas);
 
 // Figure Select
 let selectedValue = 'line';
+const gridBtn = document.getElementById('grid');
 const clearBtn = document.getElementById('clear');
 const exportBtn = document.getElementById('export');
 const figureSelect = document.getElementById('figure');
 
+gridBtn.addEventListener('click', () => context.toggleGrid());
 clearBtn.addEventListener('click', () => context.clearCanvas());
 exportBtn.addEventListener('click', () => context.exportImage());
 figureSelect.addEventListener('input', (e) => (selectedValue = e.target.value));
@@ -88,3 +90,4 @@ function initKeyMap() {
 }
 
 initKeyMap();
+context.updateCanvas();
