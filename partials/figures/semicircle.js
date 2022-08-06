@@ -50,7 +50,6 @@ export class Semicircle {
 			const dY = length.y - start.y;
 			const hyp = Math.floor(Math.sqrt(dX ** 2 + dY ** 2));
 			eAngle = Math.asin(dY / hyp) * Math.PI;
-			console.log(eAngle);
 		}
 
 		ctx.save();
