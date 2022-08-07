@@ -19,8 +19,30 @@ export class Line {
 		this.ctx.restore();
 	}
 
+	gridSnap(x, y) {
+		if (x < this.xStart + 6 && x > this.xStart - 6 && y < this.yStart + 6 && y > this.yStart - 6) {
+			return { x: this.xStart, y: this.yStart };
+		}
+
+		if (x < this.xEnd + 6 && x > this.xEnd - 6 && y < this.yEnd + 6 && y > this.yEnd - 6) {
+			return { x: this.xEnd, y: this.yEnd };
+		}
+
+		return null;
+	}
+
 	static preview(ctx, points) {
 		const [start, end] = points;
+
+		if (!end) {
+			ctx.save();
+			ctx.beginPath();
+			ctx.fillStyle = 'gray';
+			ctx.arc(start.x, start.y, 2, 0, Math.PI * 2);
+			ctx.fill();
+			ctx.restore();
+			return;
+		}
 
 		const dX = end.x - start.x;
 		const dY = end.y - start.y;
@@ -32,11 +54,14 @@ export class Line {
 		ctx.fillStyle = 'gray';
 		ctx.strokeStyle = 'gray';
 		ctx.lineWidth = 1;
-		ctx.beginPath();
 		ctx.setLineDash([5, 5]);
-		ctx.moveTo(start.x, start.y);
+		ctx.beginPath();
+		ctx.arc(start.x, start.y, 2, 0, Math.PI * 2);
+		ctx.fill();
 		ctx.lineTo(end.x, end.y);
 		ctx.stroke();
+		ctx.arc(end.x, end.y, 2, 0, Math.PI * 2);
+		ctx.fill();
 		ctx.fillText(`${lineLength}px`, textX, textY);
 		ctx.restore();
 	}

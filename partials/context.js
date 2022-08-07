@@ -1,6 +1,8 @@
 export class Context {
 	constructor(canvas) {
+		this.gridStep = 40;
 		this.showGrid = false;
+		this.turnSnap = false;
 		this.canvas = canvas;
 		this.ctx = canvas.getContext('2d');
 		this.width = canvas.width = canvas.parentElement.offsetWidth;
@@ -8,10 +10,12 @@ export class Context {
 
 		// Drawn Element
 		this.elements = [];
+		this.selectedComponents = [];
 	}
 
 	clearCanvas() {
 		this.elements = [];
+		this.selectedComponents = [];
 		this.ctx.clearRect(0, 0, this.width, this.height);
 
 		this.drawGrid();
@@ -22,6 +26,7 @@ export class Context {
 		this.drawGrid();
 
 		this.elements.forEach((element) => element.draw());
+		this.selectedComponents.forEach((element) => element.selectedFrame());
 	}
 
 	exportImage() {
@@ -33,13 +38,18 @@ export class Context {
 		link.click();
 	}
 
+	setGridStep(step) {
+		this.gridStep = step;
+		this.updateCanvas();
+	}
+
 	drawGrid() {
 		if (this.showGrid) {
-			for (let i = 20; i < this.width; i += 20) {
-				for (let j = 20; j < this.width; j += 20) {
+			for (let i = this.gridStep; i < this.width; i += this.gridStep) {
+				for (let j = this.gridStep; j < this.width; j += this.gridStep) {
 					this.ctx.save();
 					this.ctx.fillStyle = 'gray';
-					this.ctx.fillRect(i, j, 1, 1);
+					this.ctx.fillRect(i - 0.5, j - 0.5, 1, 1);
 					this.ctx.restore();
 				}
 			}
@@ -49,5 +59,26 @@ export class Context {
 	toggleGrid() {
 		this.showGrid = !this.showGrid;
 		this.updateCanvas();
+	}
+
+	toggleSnap() {
+		this.turnSnap = !this.turnSnap;
+	}
+
+	gridSnap(x, y) {
+		if (this.showGrid && this.turnSnap) {
+			if (x % this.gridStep <= 10 && y % this.gridStep <= 10) {
+				return { x: x - (x % this.gridStep), y: y - (y % this.gridStep) };
+			}
+
+			if (x % this.gridStep >= 10 && y % this.gridStep >= 10) {
+				return {
+					x: x + (this.gridStep - (x % this.gridStep)),
+					y: y + (this.gridStep - (y % this.gridStep)),
+				};
+			}
+		}
+
+		return null;
 	}
 }

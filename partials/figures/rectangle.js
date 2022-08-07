@@ -22,6 +22,16 @@ export class Rectangle {
 	static preview(ctx, points) {
 		const [start, end] = points;
 
+		if (!end) {
+			ctx.save();
+			ctx.beginPath();
+			ctx.fillStyle = 'gray';
+			ctx.arc(start.x, start.y, 2, 0, Math.PI * 2);
+			ctx.fill();
+			ctx.restore();
+			return;
+		}
+
 		const dX = end.x - start.x;
 		const dY = end.y - start.y;
 		const textX = start.x + dX / 2 - 10;
