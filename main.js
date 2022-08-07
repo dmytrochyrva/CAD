@@ -17,6 +17,7 @@ exportBtn.addEventListener('click', () => context.exportImage());
 figureSelect.addEventListener('input', (e) => (selectedValue = e.target.value));
 
 const points = [];
+const selectedComponents = [];
 const componentsHistory = [];
 const componentsMap = {
 	dot: {
@@ -41,19 +42,38 @@ const componentsMap = {
 	},
 };
 
-canvas.addEventListener('mousedown', (e) => {
-	points.push({ x: e.offsetX, y: e.offsetY });
+canvas.addEventListener('click', (e) => {
+	context.updateCanvas();
+	selectedComponents.length = 0;
+
+	if (!points.length) {
+		context.elements.forEach((element) => {
+			let selected;
+			// Remove check
+			if (element.select) {
+				selected = element.select(e.offsetX, e.offsetY);
+			}
+
+			if (selected) {
+				selectedComponents.push(element);
+			}
+		});
+	}
+
+	if (!selectedComponents.length) {
+		points.push({ x: e.offsetX, y: e.offsetY });
+	}
 
 	createElement(selectedValue, points);
 });
 
 canvas.addEventListener('mousemove', (e) => {
 	const selected = componentsMap[selectedValue];
-
 	if (points.length || selected.points === 1) {
 		const tempPoints = [...points, { x: e.offsetX, y: e.offsetY }];
 
-		previewElement(selectedValue, tempPoints);
+		context.updateCanvas();
+		componentsMap[selectedValue].class.preview(context.ctx, tempPoints);
 	}
 });
 
@@ -67,12 +87,6 @@ function createElement(figure, _points) {
 		componentsHistory.length = 0;
 		context.updateCanvas();
 	}
-}
-
-function previewElement(figure, _points) {
-	context.updateCanvas();
-
-	componentsMap[figure].class.preview(context.ctx, _points);
 }
 
 function initKeyMap() {
